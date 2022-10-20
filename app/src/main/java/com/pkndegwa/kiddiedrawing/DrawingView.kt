@@ -3,23 +3,39 @@ package com.pkndegwa.kiddiedrawing
 import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
+import android.util.TypedValue
 import android.view.MotionEvent
 import android.view.View
 
+/**
+ * This class contains the attributes for the main layout of our application.
+ */
 class DrawingView(context: Context, attrs: AttributeSet) : View(context, attrs) {
-    private var mDrawPath: CustomPath? = null
+    private var mDrawPath: CustomPath? = null // An variable of CustomPath inner class.
     private var mCanvasBitmap: Bitmap? = null
-    private var mDrawPaint: Paint? = null
+    private var mDrawPaint: Paint? = null // The Paint class holds the style and color information about how to draw geometries, text and bitmaps.
     private var mCanvasPaint: Paint? = null
     private var mBrushSize: Float = 0.0f
     private var color = Color.BLACK
-    private var canvas: Canvas? = null
     private val mPaths = ArrayList<CustomPath>()
+
+    /**
+     * A variable for canvas which will be initialized later and used.
+     *
+     *The Canvas class holds the "draw" calls. To draw something, you need 4 basic components:
+     * A Bitmap to hold the pixels, a Canvas to host the draw calls (writing into the bitmap),
+     * a drawing primitive (e.g. Rect, Path, text, Bitmap), and
+     * a paint (to describe the colors and styles for the drawing)
+     */
+    private var canvas: Canvas? = null
 
     init {
         setupDrawing()
     }
 
+    /**
+     * This method initialises the attributes of the DrawingView class.
+     */
     private fun setupDrawing() {
         mDrawPaint = Paint()
         mDrawPaint?.color = color
@@ -28,7 +44,6 @@ class DrawingView(context: Context, attrs: AttributeSet) : View(context, attrs) 
         mDrawPaint?.strokeCap = Paint.Cap.ROUND
         mDrawPath = CustomPath(color, mBrushSize)
         mCanvasPaint = Paint(Paint.DITHER_FLAG)
-        mBrushSize = 20.0f
     }
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
@@ -37,6 +52,9 @@ class DrawingView(context: Context, attrs: AttributeSet) : View(context, attrs) 
         canvas = Canvas(mCanvasBitmap!!)
     }
 
+    /**
+     * This method is called when a stroke is drawn on the canvas as a part of the painting.
+     */
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
         canvas?.drawBitmap(mCanvasBitmap!!, 0.0f, 0.0f, mCanvasPaint)
@@ -54,6 +72,9 @@ class DrawingView(context: Context, attrs: AttributeSet) : View(context, attrs) 
         }
     }
 
+    /**
+     * This method acts as an event listener when a touch event is detected on the device.
+     */
     override fun onTouchEvent(event: MotionEvent?): Boolean {
         val touchX = event?.x
         val touchY = event?.y
@@ -78,5 +99,14 @@ class DrawingView(context: Context, attrs: AttributeSet) : View(context, attrs) 
         return true
     }
 
+    // A function to set the brush size based on the new size entered but adjusted to the screen size.
+    fun setBrushSize(newSize: Float) {
+        mBrushSize = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, newSize, resources.displayMetrics)
+        mDrawPaint!!.strokeWidth = mBrushSize
+    }
+
+    /**
+     * An inner class for the custome path.
+     */
     internal inner class CustomPath(var color: Int, var brushThickness: Float) : Path()
 }
