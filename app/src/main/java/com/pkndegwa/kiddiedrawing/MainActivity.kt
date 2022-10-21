@@ -2,10 +2,12 @@ package com.pkndegwa.kiddiedrawing
 
 import android.app.Dialog
 import android.os.Bundle
+import android.view.View
 import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.get
+import androidx.core.view.indices
 import com.pkndegwa.kiddiedrawing.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -30,6 +32,12 @@ class MainActivity : AppCompatActivity() {
         mImageButtonCurrentPaint!!.setImageDrawable(
             ContextCompat.getDrawable(this, R.drawable.pallet_selected)
         )
+
+        for (i in paintColorsLayout.indices) {
+            paintColorsLayout[i].setOnClickListener {
+                selectPaintClicked(it)
+            }
+        }
     }
 
     private fun selectBrushSizeDialog() {
@@ -55,5 +63,21 @@ class MainActivity : AppCompatActivity() {
             brushDialog.dismiss()
         }
         brushDialog.show()
+    }
+
+    private fun selectPaintClicked(view: View) {
+        if (view != mImageButtonCurrentPaint) {
+            val imageButton = view as ImageButton
+            val colorTag = imageButton.tag.toString()
+            drawingView?.setColor(colorTag)
+
+            imageButton.setImageDrawable(
+                ContextCompat.getDrawable(this, R.drawable.pallet_selected)
+            )
+            mImageButtonCurrentPaint?.setImageDrawable(
+                ContextCompat.getDrawable(this, R.drawable.pallet_normal)
+            )
+            mImageButtonCurrentPaint = view
+        }
     }
 }

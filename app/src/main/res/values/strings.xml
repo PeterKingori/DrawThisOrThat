@@ -12,4 +12,5 @@
     <string name="paint_color_lollipop">paint color lollipop</string>
     <string name="paint_color_random">paint color random</string>
     <string name="paint_color_black">paint color black</string>
+    <string name="paint_color_white">paint color white</string>
 </resources>

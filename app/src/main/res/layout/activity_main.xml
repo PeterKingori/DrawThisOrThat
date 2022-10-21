@@ -99,6 +99,15 @@
             android:src="@drawable/pallet_normal"
             android:tag="@color/random" />
 
+        <ImageButton
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_margin="5dp"
+            android:background="@color/white"
+            android:contentDescription="@string/paint_color_white"
+            android:src="@drawable/pallet_normal"
+            android:tag="@color/white" />
+
     </LinearLayout>
 
     <ImageButton

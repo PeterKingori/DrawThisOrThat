@@ -105,8 +105,14 @@ class DrawingView(context: Context, attrs: AttributeSet) : View(context, attrs) 
         mDrawPaint!!.strokeWidth = mBrushSize
     }
 
+    // A function to set the color chosen from the bottom color pallet
+    fun setColor(newColor: String) {
+        color = Color.parseColor(newColor)
+        mDrawPaint!!.color = color
+    }
+
     /**
-     * An inner class for the custome path.
+     * An inner class for the custom path.
      */
     internal inner class CustomPath(var color: Int, var brushThickness: Float) : Path()
 }
