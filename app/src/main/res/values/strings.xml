@@ -4,4 +4,12 @@
     <string name="medium_brush_image">medium brush image</string>
     <string name="large_brush_image">large brush image</string>
     <string name="brush_size_selector">brush size selector</string>
+    <string name="paint_color_yellow">paint color yellow</string>
+    <string name="paint_color_peach">paint color peach</string>
+    <string name="paint_color_red">paint color red</string>
+    <string name="paint_color_green">paint color green</string>
+    <string name="paint_color_blue">paint color blue</string>
+    <string name="paint_color_lollipop">paint color lollipop</string>
+    <string name="paint_color_random">paint color random</string>
+    <string name="paint_color_black">paint color black</string>
 </resources>

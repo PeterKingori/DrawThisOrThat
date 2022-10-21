@@ -4,10 +4,13 @@ import android.app.Dialog
 import android.os.Bundle
 import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import androidx.core.view.get
 import com.pkndegwa.kiddiedrawing.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
     private var drawingView: DrawingView? = null
+    private var mImageButtonCurrentPaint: ImageButton? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,6 +24,12 @@ class MainActivity : AppCompatActivity() {
         brushImageButton.setOnClickListener {
             selectBrushSizeDialog()
         }
+
+        val paintColorsLayout = binding.paintColoursLayout
+        mImageButtonCurrentPaint = paintColorsLayout[0] as ImageButton
+        mImageButtonCurrentPaint!!.setImageDrawable(
+            ContextCompat.getDrawable(this, R.drawable.pallet_selected)
+        )
     }
 
     private fun selectBrushSizeDialog() {
