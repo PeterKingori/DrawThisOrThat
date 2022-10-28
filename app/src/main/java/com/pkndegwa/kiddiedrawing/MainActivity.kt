@@ -80,7 +80,6 @@ class MainActivity : AppCompatActivity() {
         mImageButtonCurrentPaint!!.setImageDrawable(
             ContextCompat.getDrawable(this, R.drawable.pallet_selected)
         )
-
         for (i in paintColorsLayout.indices) {
             paintColorsLayout[i].setOnClickListener {
                 selectPaintClicked(it)
@@ -90,6 +89,11 @@ class MainActivity : AppCompatActivity() {
         val galleryImageButton = binding.galleryButton
         galleryImageButton.setOnClickListener {
             requestStoragePermission()
+        }
+
+        val undoImageButton = binding.undoButton
+        undoImageButton.setOnClickListener {
+            drawingView?.undoDrawing()
         }
     }
 

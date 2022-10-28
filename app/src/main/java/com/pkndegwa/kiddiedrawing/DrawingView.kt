@@ -18,6 +18,7 @@ class DrawingView(context: Context, attrs: AttributeSet) : View(context, attrs) 
     private var mBrushSize: Float = 0.0f
     private var color = Color.BLACK
     private val mPaths = ArrayList<CustomPath>()
+    private val mUndoPaths = ArrayList<CustomPath>()
 
     /**
      * A variable for canvas which will be initialized later and used.
@@ -109,6 +110,14 @@ class DrawingView(context: Context, attrs: AttributeSet) : View(context, attrs) 
     fun setColor(newColor: String) {
         color = Color.parseColor(newColor)
         mDrawPaint!!.color = color
+    }
+
+    // A function to undo a drawn path
+    fun undoDrawing() {
+        if (mPaths.size > 0) {
+            mUndoPaths.add(mPaths.removeAt(mPaths.size - 1))
+            invalidate()
+        }
     }
 
     /**
