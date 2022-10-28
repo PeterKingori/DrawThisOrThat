@@ -3,6 +3,9 @@ package com.pkndegwa.kiddiedrawing
 import android.Manifest
 import android.app.Dialog
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Color
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.View
@@ -93,7 +96,7 @@ class MainActivity : AppCompatActivity() {
 
         val undoImageButton = binding.undoButton
         undoImageButton.setOnClickListener {
-            drawingView?.undoDrawing()
+            drawingView!!.undoDrawing()
         }
     }
 
@@ -175,5 +178,18 @@ class MainActivity : AppCompatActivity() {
                 dialog.dismiss()
             }
         builder.create().show()
+    }
+
+    /**
+     * Creates a bitmap from a combination of the background image and whatever has been drawn and returns it.
+     */
+    private fun getBitmapFromView(view: View): Bitmap {
+        val bitmap = Bitmap.createBitmap(view.width, view.height, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(bitmap)
+        val backgroundImage = view.background
+
+        if (backgroundImage != null) backgroundImage.draw(canvas) else canvas.drawColor(Color.WHITE)
+        view.draw(canvas)
+        return bitmap
     }
 }

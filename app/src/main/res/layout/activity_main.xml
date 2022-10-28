@@ -164,6 +164,15 @@
             android:scaleType="fitXY"
             android:src="@drawable/ic_undo" />
 
+        <ImageButton
+            android:id="@+id/save_button"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_margin="5dp"
+            android:contentDescription="@string/photo_library_button"
+            android:scaleType="fitXY"
+            android:src="@drawable/ic_baseline_save_24" />
+
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
