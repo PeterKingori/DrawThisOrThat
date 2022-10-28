@@ -3,6 +3,7 @@ package com.pkndegwa.kiddiedrawing
 import android.Manifest
 import android.app.Dialog
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
@@ -19,7 +20,14 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.get
 import androidx.core.view.indices
+import androidx.lifecycle.lifecycleScope
 import com.pkndegwa.kiddiedrawing.databinding.ActivityMainBinding
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.io.ByteArrayOutputStream
+import java.io.File
+import java.io.FileOutputStream
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -98,6 +106,16 @@ class MainActivity : AppCompatActivity() {
         undoImageButton.setOnClickListener {
             drawingView!!.undoDrawing()
         }
+
+        val saveButton = binding.saveButton
+        saveButton.setOnClickListener {
+            if (isReadStorageAllowed()) {
+                lifecycleScope.launch {
+                    val drawingViewFrameLayout = binding.drawingViewFrameLayout
+                    saveBitmapFile(getBitmapFromView(drawingViewFrameLayout))
+                }
+            }
+        }
     }
 
     /**
@@ -148,6 +166,14 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun isReadStorageAllowed(): Boolean {
+        val result = ContextCompat.checkSelfPermission(
+            this,
+            Manifest.permission.READ_EXTERNAL_STORAGE
+        )
+        return result == PackageManager.PERMISSION_GRANTED
+    }
+
     /**
      * This method communicates to the user why the app needs permission and asks for the permission.
      */
@@ -158,7 +184,10 @@ class MainActivity : AppCompatActivity() {
                 "The app needs to access your external storage to get a background image."
             )
         } else {
-            requestPermission.launch(arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE))
+            requestPermission.launch(arrayOf(
+                Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
+            ))
         }
     }
 
@@ -191,5 +220,48 @@ class MainActivity : AppCompatActivity() {
         if (backgroundImage != null) backgroundImage.draw(canvas) else canvas.drawColor(Color.WHITE)
         view.draw(canvas)
         return bitmap
+    }
+
+    /**
+     * A suspend function to save an image on a different thread from the main thread.
+     */
+    private suspend fun saveBitmapFile(bitmap: Bitmap?): String {
+        var result = ""
+        withContext(Dispatchers.IO) {
+            if (bitmap != null) {
+                try {
+                    // Write a compressed version of the bitmap to the specified output stream.
+                    val bytes = ByteArrayOutputStream()
+                    bitmap.compress(Bitmap.CompressFormat.PNG, 90, bytes)
+                    val file = File(externalCacheDir?.absoluteFile.toString() + File.separator
+                            + "KiddieDrawingApp_" + System.currentTimeMillis() / 1000 + ".png")
+                    val fileOutput = FileOutputStream(file)
+                    fileOutput.write(bytes.toByteArray())
+                    fileOutput.close()
+
+                    result = file.absolutePath
+
+                    runOnUiThread {
+                        if (result.isNotEmpty()) {
+                            Toast.makeText(
+                                this@MainActivity,
+                                "File saved successfully at $result",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        } else {
+                            Toast.makeText(
+                                this@MainActivity,
+                                "Something went wrong while saving the file",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    }
+                } catch (e: Exception) {
+                    result = ""
+                    e.printStackTrace()
+                }
+            }
+        }
+        return  result
     }
 }
