@@ -14,4 +14,5 @@
     <string name="paint_color_black">paint color black</string>
     <string name="paint_color_white">paint color white</string>
     <string name="photo_library_button">photo library button</string>
+    <string name="please_wait">Please wait...</string>
 </resources>

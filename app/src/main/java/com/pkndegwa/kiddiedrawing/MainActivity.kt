@@ -33,6 +33,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private var drawingView: DrawingView? = null
     private var mImageButtonCurrentPaint: ImageButton? = null
+    var customProgressDialog: Dialog? = null
 
     /**
      * A variable for an activity result launcher to open an intent.
@@ -110,6 +111,7 @@ class MainActivity : AppCompatActivity() {
         val saveButton = binding.saveButton
         saveButton.setOnClickListener {
             if (isReadStorageAllowed()) {
+                showProgressDialog()
                 lifecycleScope.launch {
                     val drawingViewFrameLayout = binding.drawingViewFrameLayout
                     saveBitmapFile(getBitmapFromView(drawingViewFrameLayout))
@@ -242,6 +244,7 @@ class MainActivity : AppCompatActivity() {
                     result = file.absolutePath
 
                     runOnUiThread {
+                        cancelProgressDialog()
                         if (result.isNotEmpty()) {
                             Toast.makeText(
                                 this@MainActivity,
@@ -263,5 +266,22 @@ class MainActivity : AppCompatActivity() {
             }
         }
         return  result
+    }
+
+    /**
+     * Method to show progress dialog
+     */
+    private fun showProgressDialog() {
+        customProgressDialog = Dialog(this)
+        customProgressDialog?.setContentView(R.layout.dialog_custom_progress)
+        customProgressDialog?.show()
+    }
+
+    /**
+     * Method to cancel progress dialog
+     */
+    private fun cancelProgressDialog() {
+        if (customProgressDialog != null) customProgressDialog?.dismiss()
+        customProgressDialog = null
     }
 }
