@@ -7,6 +7,7 @@ import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
+import android.media.MediaScannerConnection
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.View
@@ -186,10 +187,12 @@ class MainActivity : AppCompatActivity() {
                 "The app needs to access your external storage to get a background image."
             )
         } else {
-            requestPermission.launch(arrayOf(
-                Manifest.permission.READ_EXTERNAL_STORAGE,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE
-            ))
+            requestPermission.launch(
+                arrayOf(
+                    Manifest.permission.READ_EXTERNAL_STORAGE,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE
+                )
+            )
         }
     }
 
@@ -235,8 +238,10 @@ class MainActivity : AppCompatActivity() {
                     // Write a compressed version of the bitmap to the specified output stream.
                     val bytes = ByteArrayOutputStream()
                     bitmap.compress(Bitmap.CompressFormat.PNG, 90, bytes)
-                    val file = File(externalCacheDir?.absoluteFile.toString() + File.separator
-                            + "KiddieDrawingApp_" + System.currentTimeMillis() / 1000 + ".png")
+                    val file = File(
+                        externalCacheDir?.absoluteFile.toString() + File.separator
+                                + "KiddieDrawingApp_" + System.currentTimeMillis() / 1000 + ".png"
+                    )
                     val fileOutput = FileOutputStream(file)
                     fileOutput.write(bytes.toByteArray())
                     fileOutput.close()
@@ -251,6 +256,7 @@ class MainActivity : AppCompatActivity() {
                                 "File saved successfully at $result",
                                 Toast.LENGTH_SHORT
                             ).show()
+                            shareImage(result)
                         } else {
                             Toast.makeText(
                                 this@MainActivity,
@@ -265,7 +271,7 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
-        return  result
+        return result
     }
 
     /**
@@ -283,5 +289,18 @@ class MainActivity : AppCompatActivity() {
     private fun cancelProgressDialog() {
         if (customProgressDialog != null) customProgressDialog?.dismiss()
         customProgressDialog = null
+    }
+
+    /**
+     * Method to share image
+     */
+    private fun shareImage(result: String) {
+        MediaScannerConnection.scanFile(this, arrayOf(result), null) { path, uri ->
+            val shareIntent = Intent()
+            shareIntent.action = Intent.ACTION_SEND
+            shareIntent.putExtra(Intent.EXTRA_STREAM, uri)
+            shareIntent.type = "image/png"
+            startActivity(Intent.createChooser(shareIntent, "Share"))
+        }
     }
 }

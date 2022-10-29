@@ -24,7 +24,7 @@
             android:layout_height="match_parent"
             android:importantForAccessibility="no"
             android:scaleType="centerCrop"
-            android:src="@drawable/upper_east_side" />
+            tools:src="@drawable/upper_east_side" />
 
         <com.pkndegwa.kiddiedrawing.DrawingView
             android:id="@+id/drawing_view"
