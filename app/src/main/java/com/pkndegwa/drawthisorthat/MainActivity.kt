@@ -7,6 +7,7 @@ import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
+import android.graphics.drawable.Drawable
 import android.media.MediaScannerConnection
 import android.os.Bundle
 import android.provider.MediaStore
@@ -19,6 +20,7 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.get
@@ -84,6 +86,9 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         setSupportActionBar(binding.toolbar)
+        val toolbar: Toolbar = binding.toolbar
+        val barIcon: Drawable? = toolbar.overflowIcon
+        barIcon?.setTint(resources.getColor(R.color.white, resources.newTheme()))
 
         drawingView = binding.drawingView
         drawingView!!.setBrushSize(20.0.toFloat())
