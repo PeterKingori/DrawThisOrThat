@@ -10,6 +10,8 @@ import android.graphics.Color
 import android.media.MediaScannerConnection
 import android.os.Bundle
 import android.provider.MediaStore
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.widget.ImageButton
 import android.widget.Toast
@@ -22,7 +24,8 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.get
 import androidx.core.view.indices
 import androidx.lifecycle.lifecycleScope
-import com.pkndegwa.drawthisorthat.databinding.ActivityMainBinding
+import drawthisorthat.R
+import drawthisorthat.databinding.ActivityMainBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -80,6 +83,8 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        setSupportActionBar(binding.toolbar)
+
         drawingView = binding.drawingView
         drawingView!!.setBrushSize(20.0.toFloat())
 
@@ -118,6 +123,22 @@ class MainActivity : AppCompatActivity() {
                     saveBitmapFile(getBitmapFromView(drawingViewFrameLayout))
                 }
             }
+        }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
+        R.id.action_support -> {
+            val intent = Intent(this, SettingsActivity::class.java)
+            startActivity(intent)
+            true
+        }
+        else -> {
+            super.onOptionsItemSelected(item)
         }
     }
 

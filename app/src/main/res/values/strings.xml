@@ -15,4 +15,7 @@
     <string name="paint_color_white">paint color white</string>
     <string name="photo_library_button">photo library button</string>
     <string name="please_wait">Please wait…</string>
+    <string name="support">Support</string>
+    <string name="see_terms_and_privacy">See terms and privacy</string>
+    <string name="application_not_found">No application on your device can open the web page</string>
 </resources>
