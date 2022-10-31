@@ -2,10 +2,12 @@ package com.pkndegwa.drawthisorthat
 
 import android.content.ActivityNotFoundException
 import android.content.Intent
+import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import drawthisorthat.R
 import drawthisorthat.databinding.ActivitySettingsBinding
 
@@ -16,6 +18,12 @@ class SettingsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivitySettingsBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        setSupportActionBar(binding.toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        val toolbar: Toolbar = binding.toolbar
+        val upIcon: Drawable? = toolbar.navigationIcon
+        upIcon?.setTint(resources.getColor(R.color.white, resources.newTheme()))
 
         val privacyPolicy = binding.privacyPolicyLink
         privacyPolicy.setOnClickListener {
