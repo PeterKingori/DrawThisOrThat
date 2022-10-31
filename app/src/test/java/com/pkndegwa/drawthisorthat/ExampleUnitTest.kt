@@ -1,4 +1,4 @@
-package com.pkndegwa.kiddiedrawing
+package com.pkndegwa.drawthisorthat
 
 import org.junit.Test
 

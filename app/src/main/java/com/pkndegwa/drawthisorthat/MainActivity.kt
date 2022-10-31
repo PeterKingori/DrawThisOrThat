@@ -1,4 +1,4 @@
-package com.pkndegwa.kiddiedrawing
+package com.pkndegwa.drawthisorthat
 
 import android.Manifest
 import android.app.Dialog
@@ -22,7 +22,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.get
 import androidx.core.view.indices
 import androidx.lifecycle.lifecycleScope
-import com.pkndegwa.kiddiedrawing.databinding.ActivityMainBinding
+import com.pkndegwa.drawthisorthat.databinding.ActivityMainBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -34,7 +34,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private var drawingView: DrawingView? = null
     private var mImageButtonCurrentPaint: ImageButton? = null
-    var customProgressDialog: Dialog? = null
+    private var customProgressDialog: Dialog? = null
 
     /**
      * A variable for an activity result launcher to open an intent.
@@ -295,7 +295,7 @@ class MainActivity : AppCompatActivity() {
      * Method to share image
      */
     private fun shareImage(result: String) {
-        MediaScannerConnection.scanFile(this, arrayOf(result), null) { path, uri ->
+        MediaScannerConnection.scanFile(this, arrayOf(result), null) { _, uri ->
             val shareIntent = Intent()
             shareIntent.action = Intent.ACTION_SEND
             shareIntent.putExtra(Intent.EXTRA_STREAM, uri)

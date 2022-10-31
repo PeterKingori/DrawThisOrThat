@@ -26,7 +26,7 @@
             android:scaleType="centerCrop"
             tools:src="@drawable/upper_east_side" />
 
-        <com.pkndegwa.kiddiedrawing.DrawingView
+        <com.pkndegwa.drawthisorthat.DrawingView
             android:id="@+id/drawing_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

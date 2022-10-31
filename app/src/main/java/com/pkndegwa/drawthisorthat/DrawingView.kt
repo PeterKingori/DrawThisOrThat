@@ -1,4 +1,4 @@
-package com.pkndegwa.kiddiedrawing
+package com.pkndegwa.drawthisorthat
 
 import android.content.Context
 import android.graphics.*

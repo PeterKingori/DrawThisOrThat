@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Kiddie Drawing</string>
+    <string name="app_name">Draw This or That</string>
     <string name="small_brush_image">small brush image</string>
     <string name="medium_brush_image">medium brush image</string>
     <string name="large_brush_image">large brush image</string>
@@ -14,5 +14,5 @@
     <string name="paint_color_black">paint color black</string>
     <string name="paint_color_white">paint color white</string>
     <string name="photo_library_button">photo library button</string>
-    <string name="please_wait">Please wait...</string>
+    <string name="please_wait">Please wait…</string>
 </resources>

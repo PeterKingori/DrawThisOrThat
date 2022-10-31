@@ -4,11 +4,10 @@ plugins {
 }
 
 android {
-    namespace 'com.pkndegwa.kiddiedrawing'
     compileSdk 33
 
     defaultConfig {
-        applicationId "com.pkndegwa.kiddiedrawing"
+        applicationId 'com.pkndegwa.drawthisorthat'
         minSdk 27
         targetSdk 33
         versionCode 1
