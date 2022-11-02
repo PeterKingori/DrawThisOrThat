@@ -2,5 +2,5 @@
 <paths>
     <external-path
         name="captured_image"
-        path="Android/data/com.pkndegwa.kiddiedrawing/files" />
+        path="Android/data/com.pkndegwa.drawthisorthat/files" />
 </paths>

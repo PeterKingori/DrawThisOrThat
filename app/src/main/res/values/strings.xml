@@ -18,4 +18,5 @@
     <string name="support">Support</string>
     <string name="see_terms_and_privacy">See terms and privacy</string>
     <string name="application_not_found">No application on your device can open the web page</string>
+    <string name="share">Share</string>
 </resources>

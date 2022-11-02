@@ -41,6 +41,9 @@ class MainActivity : AppCompatActivity() {
     private var mImageButtonCurrentPaint: ImageButton? = null
     private var customProgressDialog: Dialog? = null
 
+    // A variable to save the absolute path of the image
+    var result = ""
+
     /**
      * A variable for an activity result launcher to open an intent.
      */
@@ -61,7 +64,7 @@ class MainActivity : AppCompatActivity() {
                 val permissionName = it.key
                 val isGranted = it.value
 
-                if (isGranted) {
+                if (isGranted && permissionName == Manifest.permission.READ_EXTERNAL_STORAGE) {
                     Toast.makeText(
                         this, "Permission granted. Now you can read the storage files.", Toast
                             .LENGTH_SHORT
@@ -69,6 +72,11 @@ class MainActivity : AppCompatActivity() {
 
                     val selectImageIntent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
                     openGalleryLauncher.launch(selectImageIntent)
+                } else if (isGranted && permissionName == Manifest.permission.WRITE_EXTERNAL_STORAGE) {
+                    Toast.makeText(
+                        this, "Permission granted. Now you can save images.", Toast
+                            .LENGTH_SHORT
+                    ).show()
                 } else {
                     if (permissionName == Manifest.permission.READ_EXTERNAL_STORAGE) {
                         Toast.makeText(
@@ -127,6 +135,12 @@ class MainActivity : AppCompatActivity() {
                     val drawingViewFrameLayout = binding.drawingViewFrameLayout
                     saveBitmapFile(getBitmapFromView(drawingViewFrameLayout))
                 }
+            } else {
+                showDialog(
+                    "Draw This or That App",
+                    "The app needs to access your external storage to save an image.",
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE
+                )
             }
         }
     }
@@ -140,6 +154,10 @@ class MainActivity : AppCompatActivity() {
         R.id.action_support -> {
             val intent = Intent(this, SettingsActivity::class.java)
             startActivity(intent)
+            true
+        }
+        R.id.action_share -> {
+            shareImage(result)
             true
         }
         else -> {
@@ -209,14 +227,14 @@ class MainActivity : AppCompatActivity() {
     private fun requestStoragePermission() {
         if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_EXTERNAL_STORAGE)) {
             showDialog(
-                "Kiddie Drawing App",
-                "The app needs to access your external storage to get a background image."
+                "Draw This or That App",
+                "The app needs to access your external storage to get a background image.",
+                Manifest.permission.READ_EXTERNAL_STORAGE
             )
         } else {
             requestPermission.launch(
                 arrayOf(
-                    Manifest.permission.READ_EXTERNAL_STORAGE,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE
+                    Manifest.permission.READ_EXTERNAL_STORAGE
                 )
             )
         }
@@ -226,12 +244,12 @@ class MainActivity : AppCompatActivity() {
      * Shows dialog saying why the app needs permission.
      * Only shown if the user has denied the permission request before.
      */
-    private fun showDialog(title: String, message: String) {
+    private fun showDialog(title: String, message: String, permission: String) {
         val builder: AlertDialog.Builder = AlertDialog.Builder(this)
             .setTitle(title)
             .setMessage(message)
             .setPositiveButton("Request again") { dialog, _ ->
-                requestPermission.launch(arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE))
+                requestPermission.launch(arrayOf(permission))
                 dialog.dismiss()
             }
             .setNegativeButton("Cancel") { dialog, _ ->
@@ -257,7 +275,7 @@ class MainActivity : AppCompatActivity() {
      * A suspend function to save an image on a different thread from the main thread.
      */
     private suspend fun saveBitmapFile(bitmap: Bitmap?): String {
-        var result = ""
+
         withContext(Dispatchers.IO) {
             if (bitmap != null) {
                 try {
@@ -266,7 +284,7 @@ class MainActivity : AppCompatActivity() {
                     bitmap.compress(Bitmap.CompressFormat.PNG, 90, bytes)
                     val file = File(
                         externalCacheDir?.absoluteFile.toString() + File.separator
-                                + "KiddieDrawingApp_" + System.currentTimeMillis() / 1000 + ".png"
+                                + "DrawThisOrThatApp_" + System.currentTimeMillis() / 1000 + ".png"
                     )
                     val fileOutput = FileOutputStream(file)
                     fileOutput.write(bytes.toByteArray())
@@ -282,7 +300,7 @@ class MainActivity : AppCompatActivity() {
                                 "File saved successfully at $result",
                                 Toast.LENGTH_SHORT
                             ).show()
-                            shareImage(result)
+
                         } else {
                             Toast.makeText(
                                 this@MainActivity,
