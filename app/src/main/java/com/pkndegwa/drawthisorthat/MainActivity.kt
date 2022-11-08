@@ -10,6 +10,7 @@ import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.media.MediaScannerConnection
 import android.os.Bundle
+import android.os.Environment
 import android.provider.MediaStore
 import android.view.Menu
 import android.view.MenuItem
@@ -34,6 +35,8 @@ import kotlinx.coroutines.withContext
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
+import java.text.SimpleDateFormat
+import java.util.*
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -275,16 +278,18 @@ class MainActivity : AppCompatActivity() {
      * A suspend function to save an image on a different thread from the main thread.
      */
     private suspend fun saveBitmapFile(bitmap: Bitmap?): String {
-
         withContext(Dispatchers.IO) {
             if (bitmap != null) {
                 try {
                     // Write a compressed version of the bitmap to the specified output stream.
                     val bytes = ByteArrayOutputStream()
                     bitmap.compress(Bitmap.CompressFormat.PNG, 90, bytes)
+                    val simpleDateFormat = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
+                    val date = simpleDateFormat.format(Calendar.getInstance().time)
                     val file = File(
-                        externalCacheDir?.absoluteFile.toString() + File.separator
-                                + "DrawThisOrThatApp_" + System.currentTimeMillis() / 1000 + ".png"
+                        Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString()
+                                + File.separator
+                                + "DrawThisOrThatApp_" + date + ".png"
                     )
                     val fileOutput = FileOutputStream(file)
                     fileOutput.write(bytes.toByteArray())

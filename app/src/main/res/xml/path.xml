@@ -2,5 +2,5 @@
 <paths>
     <external-path
         name="captured_image"
-        path="Android/data/drawthisorthat/files" />
+        path="." />
 </paths>
