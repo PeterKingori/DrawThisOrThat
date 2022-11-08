@@ -276,6 +276,8 @@ class MainActivity : AppCompatActivity() {
 
     /**
      * A suspend function to save an image on a different thread from the main thread.
+     * The image is stored in a folder with the app's name and it appears in the
+     * Gallery section of the device.
      */
     private suspend fun saveBitmapFile(bitmap: Bitmap?): String {
         withContext(Dispatchers.IO) {
@@ -286,11 +288,20 @@ class MainActivity : AppCompatActivity() {
                     bitmap.compress(Bitmap.CompressFormat.PNG, 90, bytes)
                     val simpleDateFormat = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
                     val date = simpleDateFormat.format(Calendar.getInstance().time)
-                    val file = File(
-                        Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString()
-                                + File.separator
-                                + "DrawThisOrThatApp_" + date + ".png"
+
+                    val storageFolder = File(
+                        Environment.getExternalStoragePublicDirectory(
+                            Environment.DIRECTORY_PICTURES
+                        ).toString(),
+                        "Draw This Or That App"
                     )
+                    if (!storageFolder.exists()) {
+                        storageFolder.mkdirs()
+                    }
+
+                    val imageFileName = "IMG_$date.png"
+                    val file = File(storageFolder, imageFileName)
+
                     val fileOutput = FileOutputStream(file)
                     fileOutput.write(bytes.toByteArray())
                     fileOutput.close()
@@ -314,6 +325,8 @@ class MainActivity : AppCompatActivity() {
                             ).show()
                         }
                     }
+                    // This scans the files in your device so that the image appears in your 'Gallery' section.
+                    MediaScannerConnection.scanFile(applicationContext, arrayOf(file.path), arrayOf("image/png"), null)
                 } catch (e: Exception) {
                     result = ""
                     e.printStackTrace()
