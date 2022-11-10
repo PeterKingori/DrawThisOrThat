@@ -2,7 +2,7 @@
 
 This is a simple and no-fuss app to draw or sketch in black and white, or colour. 
 Add a background image and draw over it to make it more interesting and customised.
-[View on Google Play](https://play.google.com/store/apps/details?id=com.pkndegwa.drawthisorthat){:target="_blank"}
+<a href="https://play.google.com/store/apps/details?id=com.pkndegwa.drawthisorthat" target="_blank">View on Google Play</a>
 
 ### Features
 - Select different brush thickness
